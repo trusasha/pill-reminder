@@ -12,9 +12,9 @@ const options: BottomTabNavigationOptions = {
 
 const BottomTabs = () => {
   return (
-    <Tab.Navigator initialRouteName={SCREENS.TABS.MEDICATION_LIST} screenOptions={options}>
-      <Tab.Screen name={SCREENS.TABS.MEDICATION_LIST} component={MedicationList} />
-      <Tab.Screen name={SCREENS.TABS.MEDICATION_NOTICES} component={MedicationNotes} />
+    <Tab.Navigator initialRouteName={SCREENS.MEDICATION_LIST} screenOptions={options}>
+      <Tab.Screen name={SCREENS.MEDICATION_LIST} component={MedicationList} />
+      <Tab.Screen name={SCREENS.MEDICATION_NOTICES} component={MedicationNotes} />
     </Tab.Navigator>
   );
 };

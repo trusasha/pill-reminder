@@ -13,8 +13,8 @@ const options: NativeStackNavigationOptions = {
 };
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName={SCREENS.TABS.ROUTE} screenOptions={options}>
-    <Stack.Screen name={SCREENS.TABS.ROUTE} component={BottomTabs} />
+  <Stack.Navigator initialRouteName={SCREENS.TABS} screenOptions={options}>
+    <Stack.Screen name={SCREENS.TABS} component={BottomTabs} />
   </Stack.Navigator>
 );
 
