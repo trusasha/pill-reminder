@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Text from 'components/text';
-import { SpacingStyles } from 'theme';
+import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';
 import logger from 'utils/logger';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
@@ -48,7 +48,13 @@ const MedicationList = () => {
     <Styled.Container>
       <FlatList
         data={items}
-        ListHeaderComponent={<Text style={SpacingStyles.mb.m}>MEDICATION LIST</Text>}
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <Text fontSize={theme.fontSizes.xxl} fontWeight="700" style={SpacingStyles.mb.xxl}>
+            MEDICATION LIST
+          </Text>
+        }
         style={styles.listContent}
         renderItem={renderItem}
         keyExtractor={({ id }) => id}
