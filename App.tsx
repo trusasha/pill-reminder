@@ -3,13 +3,16 @@ import React from 'react';
 
 import MainStack from 'navigation/main-stack';
 import { ThemeProvider } from 'theme';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <ThemeProvider>
-        <MainStack />
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <MainStack />
+        </ThemeProvider>
+      </SafeAreaProvider>
     </NavigationContainer>
   );
 }

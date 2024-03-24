@@ -83,7 +83,7 @@ class StorageService implements DatabaseContract {
           `INSERT INTO ${STORAGE_KEYS.medications} (name, description, initialCount, currentCount, destinationCount, createdAt, updatedAt, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             data.name,
-            data.description,
+            data.description || null,
             data.initialCount,
             data.currentCount,
             data.destinationCount,

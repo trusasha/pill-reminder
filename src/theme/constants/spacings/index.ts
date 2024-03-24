@@ -13,12 +13,14 @@ const spacings = {
 } as const;
 
 type SpacingStyles =
+  | 'margin'
   | 'marginBottom'
   | 'marginTop'
   | 'marginRight'
   | 'marginLeft'
   | 'marginHorizontal'
   | 'marginVertical'
+  | 'padding'
   | 'paddingBottom'
   | 'paddingTop'
   | 'paddingRight'
@@ -37,12 +39,14 @@ const createSpacingStyles = (style: SpacingStyles) =>
   }, {} as Record<SpacingKeys, ViewStyle>);
 
 const SpacingStyles = {
+  m: StyleSheet.create(createSpacingStyles('margin')),
   mb: StyleSheet.create(createSpacingStyles('marginBottom')),
   mt: StyleSheet.create(createSpacingStyles('marginTop')),
   mr: StyleSheet.create(createSpacingStyles('marginRight')),
   ml: StyleSheet.create(createSpacingStyles('marginLeft')),
   mh: StyleSheet.create(createSpacingStyles('marginHorizontal')),
   mv: StyleSheet.create(createSpacingStyles('marginVertical')),
+  p: StyleSheet.create(createSpacingStyles('padding')),
   pb: StyleSheet.create(createSpacingStyles('paddingBottom')),
   pt: StyleSheet.create(createSpacingStyles('paddingTop')),
   pr: StyleSheet.create(createSpacingStyles('paddingRight')),
