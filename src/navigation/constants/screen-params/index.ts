@@ -6,6 +6,7 @@ export type ScreenParams = {
   [SCREENS.MEDICATION_DETAILS]: undefined;
   [SCREENS.MEDICATION_LIST]: undefined;
   [SCREENS.MEDICATION_NOTICES]: undefined;
+  [SCREENS.MEDICATION_ADD]: undefined;
 };
 
 export type RouteParams<T extends keyof ScreenParams> = RouteProp<ScreenParams, T>;

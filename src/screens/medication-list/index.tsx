@@ -4,11 +4,15 @@ import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';
 import logger from 'utils/logger';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
+import SCREENS from 'navigation/constants/screens';
+import useNavigate from 'hooks/use-navigation';
 import Styled from './index.styled';
 import MedicationCard from './components/medication-card';
 
 const MedicationList = () => {
   logger.log(storage.isReady);
+
+  const navigate = useNavigate();
 
   const [items, setItems] = useState<Entities.Medication[]>([]);
 
@@ -58,6 +62,10 @@ const MedicationList = () => {
         style={styles.listContent}
         renderItem={renderItem}
         keyExtractor={({ id }) => id}
+      />
+      <Styled.AddButton
+        onPress={() => navigate(SCREENS.MEDICATION_ADD)}
+        sharedTransitionTag="add-medication-button"
       />
     </Styled.Container>
   );
