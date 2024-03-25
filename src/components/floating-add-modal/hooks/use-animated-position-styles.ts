@@ -19,10 +19,16 @@ const useAnimatedPositionStyles = ({
   screenSize: { width: screenWidth, height: screenHeight },
 }: Config) => {
   const positionStyles = useAnimatedStyle(() => {
-    const size = interpolate(
+    const width = interpolate(
       progress.value,
       [0, 1],
       [buttonSize, screenWidth * 0.9],
+      Extrapolation.CLAMP,
+    );
+    const height = interpolate(
+      progress.value,
+      [0, 1],
+      [buttonSize, screenHeight * 0.6],
       Extrapolation.CLAMP,
     );
     const rightDistance = interpolate(
@@ -34,15 +40,15 @@ const useAnimatedPositionStyles = ({
     const bottomDistance = interpolate(
       progress.value,
       [0, 1],
-      [buttonSize / 2, screenHeight / 2 - size / 2],
+      [buttonSize / 2, screenHeight / 2 - height / 2],
       Extrapolation.CLAMP,
     );
 
     const borderRadius = interpolate(progress.value, [0, 1], [32, 15], Extrapolation.CLAMP);
 
     return {
-      width: size,
-      height: size,
+      width,
+      height,
       bottom: bottomDistance,
       right: rightDistance,
       borderRadius,

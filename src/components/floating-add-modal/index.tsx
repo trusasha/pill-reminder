@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useWindowDimensions, StyleSheet } from 'react-native';
+import { useWindowDimensions, StyleSheet, ViewProps } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { theme } from 'theme';
@@ -16,9 +16,17 @@ interface Props {
   buttonSize: number;
   content: React.ReactNode;
   onAdd(): void;
+  contentContainerStyle?: ViewProps['style'];
 }
 
-const FloatingAddModal: FC<Props> = ({ title, submitLabel, buttonSize, content, onAdd }) => {
+const FloatingAddModal: FC<Props> = ({
+  title,
+  submitLabel,
+  buttonSize,
+  content,
+  onAdd,
+  contentContainerStyle,
+}) => {
   const screenSize = useWindowDimensions();
 
   const { isOpened, isModalVisible, translateX, translateY, scale, progress } = useFloatingSharedValues({
@@ -52,6 +60,7 @@ const FloatingAddModal: FC<Props> = ({ title, submitLabel, buttonSize, content, 
             onAdd={onAdd}
             buttonSize={buttonSize}
             isVisible={isModalVisible}
+            contentContainerStyle={contentContainerStyle}
           >
             {content}
           </Modal>

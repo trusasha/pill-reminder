@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import type { StyleProp, ViewProps, ViewStyle } from 'react-native';
+import type { ViewProps } from 'react-native';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   SharedValue,
@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import { theme } from 'theme';
 
 type ModalProps = {
   title: string;
@@ -15,7 +16,7 @@ type ModalProps = {
   buttonSize: number;
   onAdd(): void;
   children?: React.ReactNode;
-  contentContainerStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: ViewProps['style'];
 };
 
 const ModalContent: React.FC<ModalProps> = ({
@@ -48,8 +49,7 @@ const ModalContent: React.FC<ModalProps> = ({
       <View style={[styles.modalContainerTitle, { height: buttonSize }]}>
         <Text style={styles.modalTitle}>{title}</Text>
       </View>
-
-      <View style={[{ flex: 1 }, contentContainerStyle]}>{children}</View>
+      <View style={[styles.flex, contentContainerStyle]}>{children}</View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={onAdd}>
           <Text style={styles.buttonTitle}>{submitLabel}</Text>
@@ -62,16 +62,18 @@ const ModalContent: React.FC<ModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
+  },
+  flex: {
+    flex: 1,
   },
   modalContainerTitle: {
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: theme.fontSizes.xl,
     fontWeight: 'bold',
   },
-
   buttonContainer: {
     height: 80,
     width: '100%',
@@ -79,8 +81,8 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     backgroundColor: '#111',
-    margin: 10,
-    borderRadius: 12,
+    margin: theme.spacings.s,
+    borderRadius: theme.borderRadiuses.s,
     justifyContent: 'center',
     alignItems: 'center',
   },
