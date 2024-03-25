@@ -1,10 +1,11 @@
-import { Dimensions, Pressable, View } from 'react-native';
+import { Dimensions, Pressable, TouchableOpacity, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 const Styled = {
   Container: styled(View)`
@@ -29,6 +30,15 @@ const Styled = {
     border-color: ${({ theme }) => theme.colors.stroke};
     border-width: 1px;
     border-radius: ${({ theme }) => theme.borderRadiuses.m}px;
+    padding: ${({ theme }) => theme.spacings.m}px;
+  `,
+  IconContainer: styled(AnimatedTouchable)`
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: ${({ theme }) => theme.spacings.m}px;
+    transform: rotate(45deg);
+    z-index: 2;
   `,
 };
 
