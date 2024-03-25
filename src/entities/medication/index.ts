@@ -6,6 +6,5 @@ export interface Medication {
   currentCount: number;
   createdAt: string;
   updatedAt: string;
-  color: string;
   description?: string;
 }

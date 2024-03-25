@@ -40,7 +40,6 @@ class StorageService implements DatabaseContract {
           destinationCount INT,
           createdAt TEXT,
           updatedAt TEXT,
-          color TEXT
         );`,
         [],
         () => {
@@ -77,10 +76,11 @@ class StorageService implements DatabaseContract {
     data: Omit<Entities.Medication, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Entities.Medication> {
     const currentDateISO = new Date().toISOString();
+
     return new Promise((resolve, reject) => {
       this.db.transaction(tx => {
         tx.executeSql(
-          `INSERT INTO ${STORAGE_KEYS.medications} (name, description, initialCount, currentCount, destinationCount, createdAt, updatedAt, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO ${STORAGE_KEYS.medications} (name, description, initialCount, currentCount, destinationCount, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)`,
           [
             data.name,
             data.description || null,
@@ -89,7 +89,6 @@ class StorageService implements DatabaseContract {
             data.destinationCount,
             currentDateISO,
             currentDateISO,
-            data.color,
           ],
           (_, results) => {
             const insertedId = results.insertId;

@@ -6,6 +6,7 @@ import { ThemeProvider } from 'theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 function App(): React.JSX.Element {
   return (
@@ -14,6 +15,7 @@ function App(): React.JSX.Element {
         <GestureHandlerRootView style={styles.flex}>
           <ThemeProvider>
             <MainStack />
+            <Toast />
           </ThemeProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

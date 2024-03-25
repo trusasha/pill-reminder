@@ -10,7 +10,6 @@ const MedicationCard: FC<Entities.Medication> = ({
   destinationCount,
   currentCount,
   initialCount,
-  color,
   createdAt,
   updatedAt,
 }) => {
@@ -27,7 +26,6 @@ const MedicationCard: FC<Entities.Medication> = ({
             </Text>
           )}
         </View>
-        <Styled.Color color={color} />
       </Styled.Content>
       <Styled.Bottom />
     </Styled.Container>

@@ -5,6 +5,7 @@ import Animated, {
   SharedValue,
   useAnimatedProps,
   useAnimatedStyle,
+  useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { theme } from 'theme';
@@ -15,9 +16,12 @@ type ModalProps = {
   isVisible: SharedValue<boolean>;
   buttonSize: number;
   onAdd(): void;
+  isAddDisabled?: boolean;
   children?: React.ReactNode;
   contentContainerStyle?: ViewProps['style'];
 };
+
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 const ModalContent: React.FC<ModalProps> = ({
   title,
@@ -25,10 +29,13 @@ const ModalContent: React.FC<ModalProps> = ({
   isVisible,
   buttonSize,
   onAdd,
+  isAddDisabled,
   children,
   contentContainerStyle,
 }) => {
-  const rAnimatedStyle = useAnimatedStyle(
+  const disabledValue = useDerivedValue(() => withTiming(isAddDisabled ? 0.5 : 1), [isAddDisabled]);
+
+  const animatedStyle = useAnimatedStyle(
     () => ({
       opacity: withTiming(isVisible.value ? 1 : 0, {
         duration: 100,
@@ -37,7 +44,14 @@ const ModalContent: React.FC<ModalProps> = ({
     [isVisible],
   );
 
-  const rAnimatedProps = useAnimatedProps<ViewProps>(
+  const animatedButtonStyle = useAnimatedStyle(
+    () => ({
+      opacity: disabledValue.value,
+    }),
+    [disabledValue],
+  );
+
+  const animatedProps = useAnimatedProps<ViewProps>(
     () => ({
       pointerEvents: isVisible.value ? 'auto' : 'none',
     }),
@@ -45,15 +59,15 @@ const ModalContent: React.FC<ModalProps> = ({
   );
 
   return (
-    <Animated.View animatedProps={rAnimatedProps} style={[styles.container, rAnimatedStyle]}>
+    <Animated.View animatedProps={animatedProps} style={[styles.container, animatedStyle]}>
       <View style={[styles.modalContainerTitle, { height: buttonSize }]}>
         <Text style={styles.modalTitle}>{title}</Text>
       </View>
       <View style={[styles.flex, contentContainerStyle]}>{children}</View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={onAdd}>
+      <View pointerEvents={isAddDisabled ? 'none' : 'auto'} style={styles.buttonContainer}>
+        <AnimatedTouchable style={[styles.button, animatedButtonStyle]} onPress={onAdd}>
           <Text style={styles.buttonTitle}>{submitLabel}</Text>
-        </TouchableOpacity>
+        </AnimatedTouchable>
       </View>
     </Animated.View>
   );

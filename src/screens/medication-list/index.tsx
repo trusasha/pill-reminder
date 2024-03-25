@@ -14,24 +14,13 @@ const MedicationList = () => {
   const [items, setItems] = useState<Entities.Medication[]>([]);
 
   const renderItem: ListRenderItem<Entities.Medication> = ({
-    item: {
-      id,
-      name,
-      description,
-      color,
-      currentCount,
-      initialCount,
-      destinationCount,
-      createdAt,
-      updatedAt,
-    },
+    item: { id, name, description, currentCount, initialCount, destinationCount, createdAt, updatedAt },
   }) => {
     return (
       <MedicationCard
         id={id}
         name={name}
         description={description}
-        color={color}
         initialCount={initialCount}
         destinationCount={destinationCount}
         currentCount={currentCount}

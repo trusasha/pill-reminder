@@ -25,12 +25,7 @@ const useAnimatedPositionStyles = ({
       [buttonSize, screenWidth * 0.9],
       Extrapolation.CLAMP,
     );
-    const height = interpolate(
-      progress.value,
-      [0, 1],
-      [buttonSize, screenHeight * 0.6],
-      Extrapolation.CLAMP,
-    );
+    const height = interpolate(progress.value, [0, 1], [buttonSize, 500], Extrapolation.CLAMP);
     const rightDistance = interpolate(
       progress.value,
       [0, 1],

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { TextInputProps } from 'react-native';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
@@ -38,4 +38,4 @@ const TextInput: FC<Props> = ({ label, ...rest }) => {
   );
 };
 
-export default TextInput;
+export default memo(TextInput);

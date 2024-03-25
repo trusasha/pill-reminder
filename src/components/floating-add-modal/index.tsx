@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { forwardRef, memo, useCallback, useImperativeHandle } from 'react';
 import { useWindowDimensions, StyleSheet, ViewProps } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -16,67 +16,79 @@ interface Props {
   buttonSize: number;
   content: React.ReactNode;
   onAdd(): void;
+  isAddDisabled?: boolean;
   contentContainerStyle?: ViewProps['style'];
 }
 
-const FloatingAddModal: FC<Props> = ({
-  title,
-  submitLabel,
-  buttonSize,
-  content,
-  onAdd,
-  contentContainerStyle,
-}) => {
-  const screenSize = useWindowDimensions();
+export interface FloatingModalMethods {
+  close(): void;
+}
 
-  const { isOpened, isModalVisible, translateX, translateY, scale, progress } = useFloatingSharedValues({
-    screenSize,
-  });
+const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
+  ({ title, submitLabel, buttonSize, content, onAdd, isAddDisabled, contentContainerStyle }, ref) => {
+    const screenSize = useWindowDimensions();
 
-  const { positionStyles } = useAnimatedPositionStyles({
-    progress,
-    translateX,
-    translateY,
-    buttonSize,
-    scale,
-    screenSize,
-  });
+    const { isOpened, isModalVisible, translateX, translateY, scale, progress } =
+      useFloatingSharedValues({
+        screenSize,
+      });
 
-  const { panGesture } = useFloatingGestures({ isOpened, translateX, translateY, scale });
+    const { positionStyles } = useAnimatedPositionStyles({
+      progress,
+      translateX,
+      translateY,
+      buttonSize,
+      scale,
+      screenSize,
+    });
 
-  return (
-    <>
-      <Backdrop
-        isVisible={isModalVisible}
-        onPress={() => {
-          isOpened.value = !isOpened.value;
-        }}
-      />
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.floatingModal, positionStyles]}>
-          <Modal
-            title={title}
-            submitLabel={submitLabel}
-            onAdd={onAdd}
-            buttonSize={buttonSize}
-            isVisible={isModalVisible}
-            contentContainerStyle={contentContainerStyle}
-          >
-            {content}
-          </Modal>
-          <AddButton
-            buttonSize={buttonSize}
-            progress={progress}
-            onPress={() => {
-              isOpened.value = !isOpened.value;
-            }}
-          />
-          <Animated.View />
-        </Animated.View>
-      </GestureDetector>
-    </>
-  );
-};
+    const { panGesture } = useFloatingGestures({ isOpened, translateX, translateY, scale });
+
+    const onClose = useCallback(() => {
+      isOpened.value = !isOpened.value;
+    }, []);
+
+    useImperativeHandle(ref, () => ({
+      close: onClose,
+    }));
+
+    return (
+      <>
+        <Backdrop
+          isVisible={isModalVisible}
+          onPress={() => {
+            isOpened.value = !isOpened.value;
+          }}
+        />
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.floatingModal, positionStyles]}>
+            <Modal
+              title={title}
+              submitLabel={submitLabel}
+              onAdd={onAdd}
+              buttonSize={buttonSize}
+              isAddDisabled={isAddDisabled}
+              isVisible={isModalVisible}
+              contentContainerStyle={contentContainerStyle}
+            >
+              {content}
+            </Modal>
+            <AddButton
+              buttonSize={buttonSize}
+              progress={progress}
+              onPress={() => {
+                isOpened.value = !isOpened.value;
+              }}
+            />
+            <Animated.View />
+          </Animated.View>
+        </GestureDetector>
+      </>
+    );
+  },
+);
+
+FloatingAddModal.displayName = 'FloatingAddModal';
 
 const styles = StyleSheet.create({
   floatingModal: {
@@ -93,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FloatingAddModal;
+export default memo(FloatingAddModal);
