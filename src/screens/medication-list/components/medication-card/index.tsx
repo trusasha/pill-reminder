@@ -1,25 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import CountInput from 'components/count-input';
+import storage from 'services/storage';
+import logger from 'utils/logger';
+import moment from 'moment';
 import Styled from './index.styled';
+import ProgressBar from './components';
 
 const MedicationCard: FC<Entities.Medication> = ({
+  id,
   name,
   description,
   destinationCount,
   currentCount,
-  initialCount,
   createdAt,
-  updatedAt,
 }) => {
+  const [count, setCount] = useState(currentCount);
+
   return (
-    <Styled.Container activeOpacity={0.7}>
+    <Styled.Container style={SpacingStyles.mb.m} activeOpacity={0.7}>
       <Styled.Content>
-        <View>
-          <Text style={SpacingStyles.mb.m} fontSize={theme.fontSizes.xl} fontWeight="600">
-            {name}
-          </Text>
+        <View style={styles.flex}>
+          <View style={styles.row}>
+            <Text numberOfLines={1} style={styles.title} fontSize={theme.fontSizes.xl} fontWeight="600">
+              {name}
+            </Text>
+            <Text fontSize={theme.fontSizes.m} fontWeight="600">
+              Created - {moment(createdAt).format('DD/MM/YYYY')}
+            </Text>
+          </View>
           {Boolean(description) && (
             <Text style={SpacingStyles.mb.s} fontSize={theme.fontSizes.l} numberOfLines={2}>
               {description}
@@ -27,9 +38,42 @@ const MedicationCard: FC<Entities.Medication> = ({
           )}
         </View>
       </Styled.Content>
-      <Styled.Bottom />
+      <ProgressBar currentValue={count} targetValue={destinationCount}>
+        <CountInput
+          count={count}
+          setCount={value => {
+            setCount(state => {
+              if (state > value) {
+                storage.decrementMedication({ id }).catch(logger.error);
+              } else {
+                if (state === destinationCount) {
+                  return state;
+                }
+
+                storage.incrementMedication({ id }).catch(logger.error);
+              }
+
+              return value;
+            });
+          }}
+        />
+      </ProgressBar>
     </Styled.Container>
   );
 };
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  title: {
+    flex: 1,
+    marginRight: theme.spacings.s,
+  },
+  row: {
+    flexDirection: 'row',
+    marginBottom: theme.spacings.m,
+  },
+});
 
 export default MedicationCard;

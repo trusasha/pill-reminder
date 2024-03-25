@@ -6,9 +6,9 @@ import { SpacingStyles, theme } from 'theme';
 import { counterEnteringDecrement, counterEnteringIncrement } from './animation';
 
 interface Props {
-  label: string;
   count: number;
   setCount(count: number): void;
+  label?: string;
   style?: ViewProps['style'];
 }
 
@@ -51,9 +51,11 @@ const CountInput: FC<Props> = ({ label, count, setCount, style }) => {
 
   return (
     <>
-      <Text style={SpacingStyles.mb.xs} fontSize={theme.fontSizes.l} fontWeight="600">
-        {label}
-      </Text>
+      {label && (
+        <Text style={SpacingStyles.mb.xs} fontSize={theme.fontSizes.l} fontWeight="600">
+          {label}
+        </Text>
+      )}
       <View style={[styles.row, style]}>
         <AnimatedTouchable style={styles.button} onPress={onDecrement}>
           <Text fontSize={theme.fontSizes.xl} fontWeight="500">
@@ -85,6 +87,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   button: {
+    borderWidth: 1,
+    borderColor: theme.colors.grayDivider,
     width: 48,
     height: 48,
     borderRadius: theme.borderRadiuses.s,

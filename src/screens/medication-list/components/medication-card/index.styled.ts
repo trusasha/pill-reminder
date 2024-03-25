@@ -8,18 +8,12 @@ const Styled = {
     border-color: ${({ theme }) => theme.colors.grayDivider};
     border-width: ${StyleSheet.hairlineWidth}px;
     overflow: hidden;
-    padding: ${({ theme }) => theme.spacings.m}px ${({ theme }) => theme.spacings.m}px 0
-      ${({ theme }) => theme.spacings.m}px;
   `,
   Content: styled(View)`
     flex-direction: row;
     justify-content: space-between;
-  `,
-  Bottom: styled(View)`
-    flex: 1;
-    background-color: ${({ theme }) => theme.colors.neutral};
-    margin: 0 -${({ theme }) => theme.spacings.m}px 0 -${({ theme }) => theme.spacings.m}px;
-    height: 48px;
+    padding: ${({ theme }) => theme.spacings.m}px ${({ theme }) => theme.spacings.m}px 0
+      ${({ theme }) => theme.spacings.m}px;
   `,
 };
 

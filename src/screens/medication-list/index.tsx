@@ -39,11 +39,12 @@ const MedicationList = () => {
   }, []);
 
   return (
-    <Styled.Container>
+    <Styled.Container edges={['top']}>
       <FlatList
         data={items}
         bounces={false}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={SpacingStyles.pv.m}
         ListHeaderComponent={
           <Text fontSize={theme.fontSizes.xxl} fontWeight="700" style={SpacingStyles.mb.xxl}>
             MEDICATION LIST
