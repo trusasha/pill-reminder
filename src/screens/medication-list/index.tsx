@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';
@@ -30,8 +30,12 @@ const MedicationList = () => {
     );
   };
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     storage.getAllMedications().then(setItems).catch(logger.error);
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
@@ -49,7 +53,7 @@ const MedicationList = () => {
         renderItem={renderItem}
         keyExtractor={({ id }) => id}
       />
-      <AddModal />
+      <AddModal onAddMedication={fetchData} />
     </Styled.Container>
   );
 };

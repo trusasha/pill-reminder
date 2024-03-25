@@ -12,11 +12,8 @@ import useFloatingSharedValues from './hooks/use-floating-shared-values';
 
 interface Props {
   title: string;
-  submitLabel: string;
   buttonSize: number;
   content: React.ReactNode;
-  onAdd(): void;
-  isAddDisabled?: boolean;
   contentContainerStyle?: ViewProps['style'];
 }
 
@@ -25,7 +22,7 @@ export interface FloatingModalMethods {
 }
 
 const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
-  ({ title, submitLabel, buttonSize, content, onAdd, isAddDisabled, contentContainerStyle }, ref) => {
+  ({ title, buttonSize, content, contentContainerStyle }, ref) => {
     const screenSize = useWindowDimensions();
 
     const { isOpened, isModalVisible, translateX, translateY, scale, progress } =
@@ -64,10 +61,7 @@ const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
           <Animated.View style={[styles.floatingModal, positionStyles]}>
             <Modal
               title={title}
-              submitLabel={submitLabel}
-              onAdd={onAdd}
               buttonSize={buttonSize}
-              isAddDisabled={isAddDisabled}
               isVisible={isModalVisible}
               contentContainerStyle={contentContainerStyle}
             >
