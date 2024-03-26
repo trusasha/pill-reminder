@@ -9,7 +9,12 @@ import moment from 'moment';
 import Styled from './index.styled';
 import ProgressBar from './components';
 
-const MedicationCard: FC<Entities.Medication> = ({
+interface Props extends Entities.Medication {
+  onPress: (id: Entities.Medication['id']) => void;
+}
+
+const MedicationCard: FC<Props> = ({
+  onPress,
   id,
   name,
   description,
@@ -20,7 +25,7 @@ const MedicationCard: FC<Entities.Medication> = ({
   const [count, setCount] = useState(currentCount);
 
   return (
-    <Styled.Container style={SpacingStyles.mb.m} activeOpacity={0.7}>
+    <Styled.Container onPress={() => onPress(id)} style={SpacingStyles.mb.m} activeOpacity={0.7}>
       <Styled.Content>
         <View style={styles.flex}>
           <View style={styles.row}>

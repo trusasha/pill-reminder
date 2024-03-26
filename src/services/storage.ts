@@ -4,6 +4,7 @@ import * as SQLite from 'expo-sqlite';
 export interface DatabaseContract {
   isReady: boolean;
   getAllMedications(): Promise<Entities.Medication[]>;
+  getMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   addMedication(
     data: Omit<Entities.Medication, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Entities.Medication>;
@@ -62,6 +63,30 @@ class StorageService implements DatabaseContract {
           [],
           (_, { rows: { _array } }) => {
             resolve(_array);
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async getMedication({ id }: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication> {
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `SELECT * FROM ${STORAGE_KEYS.medications} WHERE id = ?`,
+          [id],
+          (_, { rows }) => {
+            if (rows.length === 0) {
+              reject(new Error(`Medication with the given ID (${id}) was not found.`));
+              return;
+            }
+
+            const medication = rows._array[0];
+            resolve(medication);
           },
           (_, error) => {
             reject(error);

@@ -4,20 +4,25 @@ import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';
 import logger from 'utils/logger';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
+import useNavigate from 'hooks/use-navigation';
+import SCREENS from 'navigation/constants/screens';
 import Styled from './index.styled';
 import MedicationCard from './components/medication-card';
 import AddModal from './components/add-modal';
 
 const MedicationList = () => {
-  logger.log(storage.isReady);
+  const navigate = useNavigate();
 
   const [items, setItems] = useState<Entities.Medication[]>([]);
+
+  const onPress = (id: Entities.Medication['id']) => navigate(SCREENS.MEDICATION_DETAILS, { id });
 
   const renderItem: ListRenderItem<Entities.Medication> = ({
     item: { id, name, description, currentCount, initialCount, destinationCount, createdAt, updatedAt },
   }) => {
     return (
       <MedicationCard
+        onPress={onPress}
         id={id}
         name={name}
         description={description}

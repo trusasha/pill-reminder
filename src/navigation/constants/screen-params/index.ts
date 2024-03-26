@@ -3,7 +3,7 @@ import SCREENS from '../screens';
 
 export type ScreenParams = {
   [SCREENS.TABS]: undefined;
-  [SCREENS.MEDICATION_DETAILS]: undefined;
+  [SCREENS.MEDICATION_DETAILS]: { id: Entities.Medication['id'] };
   [SCREENS.MEDICATION_LIST]: undefined;
   [SCREENS.MEDICATION_NOTICES]: undefined;
   [SCREENS.MEDICATION_ADD]: undefined;
