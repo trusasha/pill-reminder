@@ -12,6 +12,10 @@ export interface DatabaseContract {
   incrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   decrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   deleteMedication(data: Pick<Entities.Medication, 'id'>): Promise<boolean>;
+  updateMedication(
+    data: Pick<Entities.Medication, 'id'> &
+      Partial<Pick<Entities.Medication, 'name' | 'description' | 'currentCount' | 'destinationCount'>>,
+  ): Promise<Entities.Medication>;
 
   addNotion(data: Pick<Entities.Notion, 'text' | 'medicationId'>): Promise<Entities.Notion>;
   getMedicationNotions(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Notion[]>;
@@ -299,6 +303,57 @@ class StorageService implements DatabaseContract {
             } else {
               reject(new Error('Failed to add notion'));
             }
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async updateMedication(
+    data: Pick<Entities.Medication, 'id'> &
+      Partial<Pick<Entities.Medication, 'name' | 'description' | 'currentCount' | 'destinationCount'>>,
+  ): Promise<Entities.Medication> {
+    const { id, ...fieldsToUpdate } = data;
+    const currentDateISO = new Date().toISOString();
+
+    let fields = Object.keys(fieldsToUpdate)
+      .map(field => `${field} = ?`)
+      .join(', ');
+    const values = Object.values(fieldsToUpdate);
+
+    if (fields) {
+      fields += ', updatedAt = ?';
+      values.push(currentDateISO);
+    } else {
+      fields = 'updatedAt = ?';
+      values.push(currentDateISO);
+    }
+
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `UPDATE ${STORAGE_KEYS.medications} SET ${fields} WHERE id = ?`,
+          [...values, id],
+          () => {
+            tx.executeSql(
+              `SELECT * FROM ${STORAGE_KEYS.medications} WHERE id = ?`,
+              [id],
+              (_, { rows: { _array } }) => {
+                if (_array.length > 0) {
+                  resolve(_array[0]);
+                } else {
+                  reject(new Error(`Medication with ID ${id} not found`));
+                }
+              },
+              (_, error) => {
+                reject(error);
+                return true;
+              },
+            );
           },
           (_, error) => {
             reject(error);

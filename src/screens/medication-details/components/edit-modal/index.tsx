@@ -10,36 +10,34 @@ import storage from 'services/storage';
 import { SpacingStyles, theme } from 'theme';
 
 interface Props {
-  onAddMedication(): void;
+  medication: Entities.Medication;
+  onSubmit: (medication: Entities.Medication) => void;
 }
 
-const AddModal: FC<Props> = ({ onAddMedication }) => {
+const MODAL_OFFSET = { x: 0, y: 125 };
+
+const EditModal: FC<Props> = ({ medication, onSubmit }) => {
   const floatingModalRef = useRef<FloatingModalMethods>(null);
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState(medication.name);
+  const [description, setDescription] = useState(medication.description);
 
-  const [currentCount, setCurrentCount] = useState(0);
-  const [destinationCount, setDestinationCount] = useState(0);
+  const [currentCount, setCurrentCount] = useState(medication.currentCount);
+  const [destinationCount, setDestinationCount] = useState(medication.destinationCount);
 
-  const onAdd = () =>
+  const onEdit = () =>
     storage
-      .addMedication({
+      .updateMedication({
+        id: medication.id,
         name,
         description,
-        initialCount: currentCount,
         currentCount,
         destinationCount,
       })
-      .then(() => {
-        setName('');
-        setDescription('');
-        setCurrentCount(0);
-        setDestinationCount(0);
+      .then(data => {
+        onSubmit(data);
 
         floatingModalRef.current?.close();
-
-        onAddMedication();
       })
       .catch(error =>
         Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' }),
@@ -50,9 +48,11 @@ const AddModal: FC<Props> = ({ onAddMedication }) => {
   return (
     <FloatingAddModal
       ref={floatingModalRef}
-      title="New medication"
+      title="Edit medication"
       contentContainerStyle={styles.content}
+      offset={MODAL_OFFSET}
       buttonSize={64}
+      icon="edit"
       content={
         <>
           <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
@@ -83,7 +83,7 @@ const AddModal: FC<Props> = ({ onAddMedication }) => {
               label="Destination count"
             />
           </ScrollView>
-          <Button style={styles.button} label="Add" onPress={onAdd} isDisabled={isAddDisabled} />
+          <Button style={styles.button} label="Submit" onPress={onEdit} isDisabled={isAddDisabled} />
         </>
       }
     />
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddModal;
+export default EditModal;

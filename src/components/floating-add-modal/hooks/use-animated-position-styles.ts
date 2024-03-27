@@ -8,6 +8,7 @@ interface Config {
   progress: SharedValue<number>;
   scale: Readonly<SharedValue<number>>;
   screenSize: ScaledSize;
+  offset?: { x: number; y: number };
 }
 
 const useAnimatedPositionStyles = ({
@@ -17,6 +18,7 @@ const useAnimatedPositionStyles = ({
   progress,
   scale,
   screenSize: { width: screenWidth, height: screenHeight },
+  offset,
 }: Config) => {
   const positionStyles = useAnimatedStyle(() => {
     const width = interpolate(
@@ -29,13 +31,13 @@ const useAnimatedPositionStyles = ({
     const rightDistance = interpolate(
       progress.value,
       [0, 1],
-      [buttonSize / 2, screenWidth * 0.05],
+      [buttonSize / 2 + (offset?.x || 0), screenWidth * 0.05],
       Extrapolation.CLAMP,
     );
     const bottomDistance = interpolate(
       progress.value,
       [0, 1],
-      [buttonSize / 2, screenHeight / 2 - height / 2],
+      [buttonSize / 2 + (offset?.y || 0), screenHeight / 2 - height / 2],
       Extrapolation.CLAMP,
     );
 

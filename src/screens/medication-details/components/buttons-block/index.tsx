@@ -22,7 +22,6 @@ const ButtonsBlock: FC<Props> = ({ id }) => {
 
   return (
     <View>
-      <Button style={styles.button} icon="edit" />
       <Button style={styles.button} icon="delete" onPress={onDelete} />
     </View>
   );

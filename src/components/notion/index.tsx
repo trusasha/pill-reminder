@@ -2,7 +2,7 @@ import Text from 'components/text';
 import moment from 'moment';
 import React, { FC, memo } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
-import Animated, { FadeIn, LinearTransition } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SpacingStyles, theme } from 'theme';
 
 interface Props {
@@ -13,13 +13,13 @@ interface Props {
 
 const Notion: FC<Props> = ({ text, createdAt, additionalStyles }) => {
   return (
-    <Animated.View entering={FadeIn} layout={LinearTransition} style={styles.row}>
+    <Animated.View entering={FadeIn} style={styles.row}>
       <View style={[styles.container, additionalStyles]}>
         <Text color={theme.colors.stroke} fontSize={theme.fontSizes.l} fontWeight="600">
           {text}
         </Text>
       </View>
-      <Text style={SpacingStyles.ml.m}>{moment(createdAt).format('mm:hh DD/MM')}</Text>
+      <Text style={SpacingStyles.ml.m}>{moment(createdAt).format('H:mm DD/MM')}</Text>
     </Animated.View>
   );
 };

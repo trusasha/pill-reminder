@@ -14,7 +14,10 @@ interface Props {
   title: string;
   buttonSize: number;
   content: React.ReactNode;
+  offset?: { x: number; y: number };
+  addButtonStyle?: ViewProps['style'];
   contentContainerStyle?: ViewProps['style'];
+  icon?: string;
 }
 
 export interface FloatingModalMethods {
@@ -22,7 +25,7 @@ export interface FloatingModalMethods {
 }
 
 const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
-  ({ title, buttonSize, content, contentContainerStyle }, ref) => {
+  ({ title, buttonSize, content, offset, addButtonStyle, contentContainerStyle, icon }, ref) => {
     const screenSize = useWindowDimensions();
 
     const { isOpened, isModalVisible, translateX, translateY, scale, progress } =
@@ -37,6 +40,7 @@ const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
       buttonSize,
       scale,
       screenSize,
+      offset,
     });
 
     const { panGesture } = useFloatingGestures({ isOpened, translateX, translateY, scale });
@@ -69,7 +73,8 @@ const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
             </Modal>
             <AddButton
               buttonSize={buttonSize}
-              progress={progress}
+              icon={icon}
+              additionalStyle={addButtonStyle}
               onPress={() => {
                 isOpened.value = !isOpened.value;
               }}

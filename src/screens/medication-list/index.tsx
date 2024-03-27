@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';

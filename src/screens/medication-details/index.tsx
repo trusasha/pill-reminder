@@ -2,7 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import Text from 'components/text';
 import moment from 'moment';
 import { RouteParams } from 'navigation/constants/screen-params';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, ListRenderItem, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import storage from 'services/storage';
@@ -11,6 +11,12 @@ import ToastService from 'services/toast';
 import Notion from 'components/notion';
 import Footer from './components/footer';
 import ButtonsBlock from './components/buttons-block';
+import EditModal from './components/edit-modal';
+
+interface Callbacks {
+  renderItem: ListRenderItem<Entities.Notion>;
+  onAddNotion: (notion: Entities.Notion) => void;
+}
 
 const MedicationDetails = () => {
   const { params } = useRoute<RouteParams<'MEDICATION_DETAILS'>>();
@@ -20,21 +26,24 @@ const MedicationDetails = () => {
 
   const id = params?.id;
 
+  const callbacks: Callbacks = useMemo(
+    () => ({
+      renderItem: ({ item }) => {
+        return (
+          <Notion additionalStyles={SpacingStyles.mb.s} text={item.text} createdAt={item.createdAt} />
+        );
+      },
+      onAddNotion: (notion: Entities.Notion) => setNotions(state => [notion, ...state]),
+    }),
+    [id],
+  );
+
   useEffect(() => {
     if (id) {
       storage.getMedication({ id }).then(setDetails).catch(ToastService.showErrorMessage);
       storage.getMedicationNotions({ id }).then(setNotions).catch(ToastService.showErrorMessage);
     }
-  }, [id]);
-
-  const renderNotion: ListRenderItem<Entities.Notion> = useCallback(({ item }) => {
-    return <Notion additionalStyles={SpacingStyles.mb.s} text={item.text} createdAt={item.createdAt} />;
-  }, []);
-
-  const onAddNotion = useCallback(
-    (notion: Entities.Notion) => setNotions(state => [notion, ...state]),
-    [],
-  );
+  }, [id, callbacks]);
 
   return (
     <>
@@ -54,13 +63,14 @@ const MedicationDetails = () => {
             </Animated.View>
           }
           data={notions}
-          renderItem={renderNotion}
+          renderItem={callbacks.renderItem}
           keyExtractor={({ id }) => id}
         />
       )}
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={60}>
-        <Footer onAddNotion={onAddNotion} id={id} />
+        <Footer onAddNotion={callbacks.onAddNotion} id={id} />
       </KeyboardAvoidingView>
+      {details && <EditModal medication={details} onSubmit={setDetails} />}
     </>
   );
 };
