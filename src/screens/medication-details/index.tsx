@@ -2,12 +2,13 @@ import { useRoute } from '@react-navigation/native';
 import Text from 'components/text';
 import moment from 'moment';
 import { RouteParams } from 'navigation/constants/screen-params';
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, KeyboardAvoidingView, ListRenderItem, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import Toast from 'react-native-toast-message';
 import storage from 'services/storage';
-import { theme } from 'theme';
+import { SpacingStyles, theme } from 'theme';
+import ToastService from 'services/toast';
+import Notion from 'components/notion';
 import Footer from './components/footer';
 import ButtonsBlock from './components/buttons-block';
 
@@ -15,47 +16,71 @@ const MedicationDetails = () => {
   const { params } = useRoute<RouteParams<'MEDICATION_DETAILS'>>();
 
   const [details, setDetails] = useState<Entities.Medication | null>(null);
+  const [notions, setNotions] = useState<Entities.Notion[]>([]);
 
   const id = params?.id;
 
   useEffect(() => {
     if (id) {
-      storage
-        .getMedication({ id })
-        .then(setDetails)
-        .catch(error =>
-          Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' }),
-        );
+      storage.getMedication({ id }).then(setDetails).catch(ToastService.showErrorMessage);
+      storage.getMedicationNotions({ id }).then(setNotions).catch(ToastService.showErrorMessage);
     }
   }, [id]);
+
+  const renderNotion: ListRenderItem<Entities.Notion> = useCallback(({ item }) => {
+    return <Notion additionalStyles={SpacingStyles.mb.s} text={item.text} createdAt={item.createdAt} />;
+  }, []);
+
+  const onAddNotion = useCallback(
+    (notion: Entities.Notion) => setNotions(state => [notion, ...state]),
+    [],
+  );
 
   return (
     <>
       {details && (
-        <Animated.View style={styles.content} entering={FadeIn}>
-          <View>
-            <Text style={styles.title}>{details.name}</Text>
-            <Text style={styles.description}>{details.description}</Text>
-            <Text style={styles.text}>Added: {moment(details.createdAt).format('DD/MM/YYYY')}</Text>
-            <Text style={styles.text}>Current count: {details.currentCount}</Text>
-            <Text style={styles.text}>Target count: {details.destinationCount}</Text>
-          </View>
-          <ButtonsBlock id={id} />
-        </Animated.View>
+        <FlatList
+          contentContainerStyle={styles.scrollContent}
+          ListHeaderComponent={
+            <Animated.View style={styles.header} entering={FadeIn}>
+              <View style={styles.info}>
+                <Text style={styles.title}>{details.name}</Text>
+                <Text style={styles.description}>{details.description}</Text>
+                <Text style={styles.text}>Added: {moment(details.createdAt).format('DD/MM/YYYY')}</Text>
+                <Text style={styles.text}>Current count: {details.currentCount}</Text>
+                <Text style={styles.text}>Target count: {details.destinationCount}</Text>
+              </View>
+              <ButtonsBlock id={id} />
+            </Animated.View>
+          }
+          data={notions}
+          renderItem={renderNotion}
+          keyExtractor={({ id }) => id}
+        />
       )}
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={60}>
-        <Footer id={id} />
+        <Footer onAddNotion={onAddNotion} id={id} />
       </KeyboardAvoidingView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  scrollContent: {
     padding: 16,
+  },
+  info: {
     flex: 1,
+    marginRight: 8,
+  },
+  header: {
+    flex: 1,
+    backgroundColor: theme.colors.planeWhite,
+    padding: 16,
+    borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 30,
   },
   title: {
     color: theme.colors.stroke,

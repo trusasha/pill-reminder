@@ -6,6 +6,7 @@ import logger from 'utils/logger';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
 import useNavigate from 'hooks/use-navigation';
 import SCREENS from 'navigation/constants/screens';
+import { useFocusEffect } from '@react-navigation/native';
 import Styled from './index.styled';
 import MedicationCard from './components/medication-card';
 import AddModal from './components/add-modal';
@@ -39,9 +40,11 @@ const MedicationList = () => {
     storage.getAllMedications().then(setItems).catch(logger.error);
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData]),
+  );
 
   return (
     <Styled.Container edges={['top']}>

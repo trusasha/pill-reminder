@@ -3,6 +3,7 @@ import * as SQLite from 'expo-sqlite';
 
 export interface DatabaseContract {
   isReady: boolean;
+
   getAllMedications(): Promise<Entities.Medication[]>;
   getMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   addMedication(
@@ -11,10 +12,14 @@ export interface DatabaseContract {
   incrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   decrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   deleteMedication(data: Pick<Entities.Medication, 'id'>): Promise<boolean>;
+
+  addNotion(data: Pick<Entities.Notion, 'text' | 'medicationId'>): Promise<Entities.Notion>;
+  getMedicationNotions(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Notion[]>;
 }
 
 const STORAGE_KEYS = {
   medications: 'medications',
+  notions: 'notions',
 };
 
 class StorageService implements DatabaseContract {
@@ -41,7 +46,7 @@ class StorageService implements DatabaseContract {
           currentCount INT DEFAULT 0,
           destinationCount INT,
           createdAt TEXT,
-          updatedAt TEXT,
+          updatedAt TEXT
         );`,
         [],
         () => {
@@ -50,6 +55,25 @@ class StorageService implements DatabaseContract {
         },
         (_, error) => {
           logger.error('Database initialization error:', error);
+          return true;
+        },
+      );
+
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS ${STORAGE_KEYS.notions} (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          text TEXT,
+          createdAt TEXT,
+          medicationId INTEGER,
+          FOREIGN KEY(medicationId) REFERENCES ${STORAGE_KEYS.medications}(id) ON DELETE CASCADE
+        );`,
+        [],
+        () => {
+          logger.log('Table notions initialized');
+          this.isReady = true;
+        },
+        (_, error) => {
+          logger.error('Error initializing table notions:', error);
           return true;
         },
       );
@@ -242,6 +266,59 @@ class StorageService implements DatabaseContract {
             } else {
               resolve(true);
             }
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async addNotion(
+    data: Pick<Entities.Notion, 'text' | 'medicationId'>,
+  ): Promise<Entities.Notion> {
+    const currentDateISO = new Date().toISOString();
+
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `INSERT INTO ${STORAGE_KEYS.notions} (text, createdAt, medicationId) VALUES (?, ?, ?)`,
+          [data.text, currentDateISO, data.medicationId],
+          (_, results) => {
+            const insertedId = results.insertId;
+            if (insertedId) {
+              const newNotion: Entities.Notion = {
+                id: insertedId.toString(),
+                text: data.text,
+                createdAt: currentDateISO,
+                medicationId: data.medicationId,
+              };
+              resolve(newNotion);
+            } else {
+              reject(new Error('Failed to add notion'));
+            }
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async getMedicationNotions({
+    id,
+  }: Pick<Entities.Medication, 'id'>): Promise<Entities.Notion[]> {
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `SELECT * FROM ${STORAGE_KEYS.notions} WHERE medicationId = ? ORDER BY createdAt DESC`,
+          [id],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
           },
           (_, error) => {
             reject(error);
