@@ -10,6 +10,7 @@ export interface DatabaseContract {
   ): Promise<Entities.Medication>;
   incrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
   decrementMedication(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Medication>;
+  deleteMedication(data: Pick<Entities.Medication, 'id'>): Promise<boolean>;
 }
 
 const STORAGE_KEYS = {
@@ -219,6 +220,28 @@ class StorageService implements DatabaseContract {
                 return true;
               },
             );
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async deleteMedication({ id }: Pick<Entities.Medication, 'id'>): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `DELETE FROM ${STORAGE_KEYS.medications} WHERE id = ?`,
+          [id],
+          (_, result) => {
+            if (result.rowsAffected === 0) {
+              reject(new Error(`Medication with the given ID (${id}) does not exist.`));
+            } else {
+              resolve(true);
+            }
           },
           (_, error) => {
             reject(error);
