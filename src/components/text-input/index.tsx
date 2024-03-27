@@ -6,7 +6,7 @@ import { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from '
 import Styled from './index.styled';
 
 interface Props extends TextInputProps {
-  label: string;
+  label?: string;
 }
 
 const TextInput: FC<Props> = ({ label, ...rest }) => {
@@ -30,9 +30,11 @@ const TextInput: FC<Props> = ({ label, ...rest }) => {
 
   return (
     <>
-      <Text style={SpacingStyles.mb.xs} fontSize={theme.fontSizes.l} fontWeight="600">
-        {label}
-      </Text>
+      {Boolean(label) && (
+        <Text style={SpacingStyles.mb.xs} fontSize={theme.fontSizes.l} fontWeight="600">
+          {label}
+        </Text>
+      )}
       <Styled.Input {...rest} style={[animatedStyles, rest.style]} onFocus={onFocus} onBlur={onBlur} />
     </>
   );
