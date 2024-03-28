@@ -19,6 +19,7 @@ export interface DatabaseContract {
 
   addNotion(data: Pick<Entities.Notion, 'text' | 'medicationId'>): Promise<Entities.Notion>;
   getMedicationNotions(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Notion[]>;
+  getMedicationSectionNotices(): Promise<Entities.NoticeSection[]>;
 }
 
 const STORAGE_KEYS = {
@@ -270,6 +271,46 @@ class StorageService implements DatabaseContract {
             } else {
               resolve(true);
             }
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          },
+        );
+      });
+    });
+  }
+
+  public async getMedicationSectionNotices(): Promise<Entities.NoticeSection[]> {
+    return new Promise((resolve, reject) => {
+      this.db.transaction(tx => {
+        tx.executeSql(
+          `SELECT m.id as medicationId, m.name, n.text, n.createdAt 
+           FROM ${STORAGE_KEYS.medications} m
+           JOIN ${STORAGE_KEYS.notions} n ON m.id = n.medicationId
+           ORDER BY n.createdAt DESC`,
+          [],
+          (_, result) => {
+            const rows = result.rows._array;
+            const noticeSectionsMap = new Map();
+
+            rows.forEach(row => {
+              if (!noticeSectionsMap.has(row.medicationId)) {
+                noticeSectionsMap.set(row.medicationId, {
+                  title: row.name,
+                  data: [],
+                  medicationId: row.medicationId,
+                });
+              }
+              const section = noticeSectionsMap.get(row.medicationId);
+              section.data.push({
+                text: row.text,
+                createdAt: row.createdAt,
+              });
+            });
+
+            const noticeSections = Array.from(noticeSectionsMap.values());
+            resolve(noticeSections);
           },
           (_, error) => {
             reject(error);

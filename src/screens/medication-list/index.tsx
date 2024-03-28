@@ -3,27 +3,29 @@ import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
 import storage from 'services/storage';
 import logger from 'utils/logger';
-import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
-import useNavigate from 'hooks/use-navigation';
-import SCREENS from 'navigation/constants/screens';
+import { FlatList, ListRenderItem } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Styled from './index.styled';
 import MedicationCard from './components/medication-card';
 import AddModal from './components/add-modal';
 
 const MedicationList = () => {
-  const navigate = useNavigate();
-
   const [items, setItems] = useState<Entities.Medication[]>([]);
 
-  const onPress = (id: Entities.Medication['id']) => navigate(SCREENS.MEDICATION_DETAILS, { id });
-
-  const renderItem: ListRenderItem<Entities.Medication> = ({
-    item: { id, name, description, currentCount, initialCount, destinationCount, createdAt, updatedAt },
-  }) => {
-    return (
+  const renderItem: ListRenderItem<Entities.Medication> = useCallback(
+    ({
+      item: {
+        id,
+        name,
+        description,
+        currentCount,
+        initialCount,
+        destinationCount,
+        createdAt,
+        updatedAt,
+      },
+    }) => (
       <MedicationCard
-        onPress={onPress}
         id={id}
         name={name}
         description={description}
@@ -33,8 +35,9 @@ const MedicationList = () => {
         createdAt={createdAt}
         updatedAt={updatedAt}
       />
-    );
-  };
+    ),
+    [],
+  );
 
   const fetchData = useCallback(() => {
     storage.getAllMedications().then(setItems).catch(logger.error);
@@ -58,7 +61,7 @@ const MedicationList = () => {
             MEDICATION LIST
           </Text>
         }
-        style={styles.listContent}
+        style={SpacingStyles.p.m}
         renderItem={renderItem}
         keyExtractor={({ id }) => id}
       />
@@ -66,11 +69,5 @@ const MedicationList = () => {
     </Styled.Container>
   );
 };
-
-const styles = StyleSheet.create({
-  listContent: {
-    ...SpacingStyles.p.m,
-  },
-});
 
 export default MedicationList;

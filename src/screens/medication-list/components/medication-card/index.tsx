@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
 import { StyleSheet, View } from 'react-native';
@@ -6,15 +6,12 @@ import CountInput from 'components/count-input';
 import storage from 'services/storage';
 import logger from 'utils/logger';
 import moment from 'moment';
+import useNavigate from 'hooks/use-navigation';
+import SCREENS from 'navigation/constants/screens';
 import Styled from './index.styled';
 import ProgressBar from './components';
 
-interface Props extends Entities.Medication {
-  onPress: (id: Entities.Medication['id']) => void;
-}
-
-const MedicationCard: FC<Props> = ({
-  onPress,
+const MedicationCard: FC<Entities.Medication> = ({
   id,
   name,
   description,
@@ -22,6 +19,11 @@ const MedicationCard: FC<Props> = ({
   currentCount,
   createdAt,
 }) => {
+  const navigate = useNavigate();
+
+  const onPress = (itemId: Entities.Medication['id']) =>
+    navigate(SCREENS.MEDICATION_DETAILS, { id: itemId });
+
   const [count, setCount] = useState(currentCount);
 
   return (
@@ -81,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MedicationCard;
+export default memo(MedicationCard);
