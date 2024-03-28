@@ -1,4 +1,5 @@
 package com.pillreminder
+import android.os.Bundle
 import expo.modules.ReactActivityDelegateWrapper
 
 import com.facebook.react.ReactActivity

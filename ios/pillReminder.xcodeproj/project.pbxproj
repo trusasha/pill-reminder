@@ -32,6 +32,7 @@
 		00E356EE1AD99517003FC87E /* pillReminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pillReminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* pillReminderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pillReminderTests.m; sourceTree = "<group>"; };
+		048FDD012BB043E8006B2A86 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* pillReminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pillReminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = pillReminder/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = pillReminder/AppDelegate.mm; sourceTree = "<group>"; };
@@ -87,9 +88,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		048FDCF92BB043E8006B2A86 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				048FDD012BB043E8006B2A86 /* AntDesign.ttf */,
+			);
+			name = Fonts;
+			path = "../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* pillReminder */ = {
 			isa = PBXGroup;
 			children = (
+				048FDCF92BB043E8006B2A86 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
