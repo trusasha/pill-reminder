@@ -1,15 +1,12 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
 import { StyleSheet, View } from 'react-native';
-import CountInput from 'components/count-input';
-import storage from 'services/storage';
-import logger from 'utils/logger';
 import moment from 'moment';
 import useNavigate from 'hooks/use-navigation';
 import SCREENS from 'navigation/constants/screens';
 import Styled from './index.styled';
-import ProgressBar from './components';
+import Footer from './components/footer';
 
 const MedicationCard: FC<Entities.Medication> = ({
   id,
@@ -23,8 +20,6 @@ const MedicationCard: FC<Entities.Medication> = ({
 
   const onPress = (itemId: Entities.Medication['id']) =>
     navigate(SCREENS.MEDICATION_DETAILS, { id: itemId });
-
-  const [count, setCount] = useState(currentCount);
 
   return (
     <Styled.Container onPress={() => onPress(id)} style={SpacingStyles.mb.m} activeOpacity={0.7}>
@@ -45,26 +40,7 @@ const MedicationCard: FC<Entities.Medication> = ({
           )}
         </View>
       </Styled.Content>
-      <ProgressBar currentValue={count} targetValue={destinationCount}>
-        <CountInput
-          count={count}
-          setCount={value => {
-            setCount(state => {
-              if (state > value) {
-                storage.decrementMedication({ id }).catch(logger.error);
-              } else {
-                if (state === destinationCount) {
-                  return state;
-                }
-
-                storage.incrementMedication({ id }).catch(logger.error);
-              }
-
-              return value;
-            });
-          }}
-        />
-      </ProgressBar>
+      <Footer id={id} currentCount={currentCount} destinationCount={destinationCount} />
     </Styled.Container>
   );
 };
