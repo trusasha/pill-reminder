@@ -1,6 +1,6 @@
 import Button from 'components/button';
 import CountInput from 'components/count-input';
-import FloatingAddModal, { FloatingModalMethods } from 'components/floating-add-modal';
+import FloatingAddModal, { FloatingModalMethods } from '5-entites/medications/ui/floating-modal';
 import TextInput from 'components/text-input';
 import React, { FC, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';

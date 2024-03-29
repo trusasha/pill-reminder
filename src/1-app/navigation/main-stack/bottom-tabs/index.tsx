@@ -1,10 +1,8 @@
 import React from 'react';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SCREENS from 'navigation/constants/screens';
-import MedicationList from 'screens/medication-list';
-import MedicationNotes from 'screens/medication-notes';
-import Icon from 'components/icon';
-import { theme } from 'theme';
+import SCREENS from '1-app/navigation/constants/screens';
+import { MedicationsList, NotesList } from '2-screens';
+import { Icon, theme } from '6-shared';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +26,7 @@ const BottomTabs = () => {
             />
           ),
         }}
-        component={MedicationList}
+        component={MedicationsList}
       />
       <Tab.Screen
         name={SCREENS.MEDICATION_NOTICES}
@@ -43,7 +41,7 @@ const BottomTabs = () => {
             />
           ),
         }}
-        component={MedicationNotes}
+        component={NotesList}
       />
     </Tab.Navigator>
   );

@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import Text from 'components/text';
 import { SpacingStyles, theme } from 'theme';
-import storage from 'services/storage';
 import logger from 'utils/logger';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import medicationsStorage from '5-entites/medications/services/medications-storage';
 import Styled from './index.styled';
 import MedicationCard from './components/medication-card';
 import AddModal from './components/add-modal';
@@ -40,7 +40,7 @@ const MedicationList = () => {
   );
 
   const fetchData = useCallback(() => {
-    storage.getAllMedications().then(setItems).catch(logger.error);
+    medicationsStorage.getAllMedications().then(setItems).catch(logger.error);
   }, []);
 
   useFocusEffect(

@@ -24,7 +24,7 @@ export interface FloatingModalMethods {
   close(): void;
 }
 
-const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
+const FloatingModal = forwardRef<FloatingModalMethods, Props>(
   ({ title, buttonSize, content, offset, addButtonStyle, contentContainerStyle, icon }, ref) => {
     const screenSize = useWindowDimensions();
 
@@ -87,7 +87,7 @@ const FloatingAddModal = forwardRef<FloatingModalMethods, Props>(
   },
 );
 
-FloatingAddModal.displayName = 'FloatingAddModal';
+FloatingModal.displayName = 'FloatingModal';
 
 const styles = StyleSheet.create({
   floatingModal: {
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(FloatingAddModal);
+export default memo(FloatingModal);

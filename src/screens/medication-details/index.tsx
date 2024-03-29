@@ -1,11 +1,11 @@
 import { useRoute } from '@react-navigation/native';
-import { RouteParams } from 'navigation/constants/screen-params';
+import { RouteParams } from '1-app/navigation/constants/screen-params';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, ListRenderItem, StyleSheet } from 'react-native';
 import storage from 'services/storage';
 import { SpacingStyles } from 'theme';
 import ToastService from 'services/toast';
-import Notion from 'components/notion';
+import Notion from '5-entites/notions/ui/notion';
 import Footer from './components/footer';
 import EditModal from './components/edit-modal';
 import Header from './components/header';

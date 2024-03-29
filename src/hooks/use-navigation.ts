@@ -1,5 +1,5 @@
 import { NavigationHelpers, useNavigation } from '@react-navigation/native';
-import { ScreenParams } from 'navigation/constants/screen-params';
+import { ScreenParams } from '1-app/navigation/constants/screen-params';
 
 /**
  * Custom hook useNavigate to abstract the navigation logic.

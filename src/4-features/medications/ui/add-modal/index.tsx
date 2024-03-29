@@ -1,13 +1,8 @@
-import medicationsStorage from '5-entites/medications/services/medications-storage';
-import Button from 'components/button';
-import CountInput from 'components/count-input';
-import FloatingAddModal, { FloatingModalMethods } from '5-entites/medications/ui/floating-modal';
-import TextInput from 'components/text-input';
+import { FloatingModal, FloatingModalMethods, medicationsStorage } from '5-entites';
+import { Button, CountInput, SpacingStyles, TextInput, ToastService, theme } from '6-shared';
 import React, { FC, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Toast from 'react-native-toast-message';
-import { SpacingStyles, theme } from 'theme';
 
 interface Props {
   onAddMedication(): void;
@@ -41,14 +36,12 @@ const AddModal: FC<Props> = ({ onAddMedication }) => {
 
         onAddMedication();
       })
-      .catch(error =>
-        Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' }),
-      );
+      .catch(ToastService.showErrorMessage);
 
   const isAddDisabled = !name || !destinationCount || currentCount > destinationCount;
 
   return (
-    <FloatingAddModal
+    <FloatingModal
       ref={floatingModalRef}
       title="New medication"
       contentContainerStyle={styles.content}

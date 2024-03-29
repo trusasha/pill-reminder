@@ -6,16 +6,12 @@ import moment from 'moment';
 import useNavigate from 'hooks/use-navigation';
 import SCREENS from '1-app/navigation/constants/screens';
 import Styled from './index.styled';
-import Footer from './components/footer';
 
-const MedicationCard: FC<Entities.Medication> = ({
-  id,
-  name,
-  description,
-  destinationCount,
-  currentCount,
-  createdAt,
-}) => {
+interface Props extends Pick<Entities.Medication, 'id' | 'name' | 'description' | 'createdAt'> {
+  footerComponent?: React.ReactNode;
+}
+
+const MedicationCardEntity: FC<Props> = ({ id, name, description, createdAt, footerComponent }) => {
   const navigate = useNavigate();
 
   const onPress = (itemId: Entities.Medication['id']) =>
@@ -40,7 +36,7 @@ const MedicationCard: FC<Entities.Medication> = ({
           )}
         </View>
       </Styled.Content>
-      <Footer id={id} currentCount={currentCount} destinationCount={destinationCount} />
+      {footerComponent}
     </Styled.Container>
   );
 };
@@ -59,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(MedicationCard);
+export default memo(MedicationCardEntity);

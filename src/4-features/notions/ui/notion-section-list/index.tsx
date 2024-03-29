@@ -1,11 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { SectionList, SectionListProps } from 'react-native';
-import storage from 'services/storage';
-import { SpacingStyles, theme } from 'theme';
-import Text from 'components/text';
-import ToastService from 'services/toast';
-import Notion from '5-entites/notions/ui/notion';
 import { useFocusEffect } from '@react-navigation/native';
+import { SpacingStyles, Text, ToastService, theme } from '6-shared';
+import { Notion, notionsStorage } from '5-entites';
 import Styled from './index.styled';
 
 const renderItem: SectionListProps<Entities.Notion>['renderItem'] = ({ item }) => (
@@ -31,12 +28,15 @@ const ListHeaderComponent = (
   </Text>
 );
 
-const MedicationNotes = () => {
+const NotionSectionList = () => {
   const [sections, setSections] = useState<Entities.NoticeSection[]>([]);
 
   useFocusEffect(
     useCallback(() => {
-      storage.getMedicationSectionNotices().then(setSections).catch(ToastService.showErrorMessage);
+      notionsStorage
+        .getMedicationSectionNotices()
+        .then(setSections)
+        .catch(ToastService.showErrorMessage);
     }, []),
   );
 
@@ -57,4 +57,4 @@ const MedicationNotes = () => {
   );
 };
 
-export default MedicationNotes;
+export default NotionSectionList;
