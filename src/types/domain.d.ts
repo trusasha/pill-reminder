@@ -1,7 +1,7 @@
 declare namespace Entities {
-  type Medication = import('../entities/medication').Medication;
-  type Notion = import('../entities/notion').Notion;
-  type NoticeSection = import('../entities/notice-section').NoticeSection;
+  type Medication = import('./medication').Medication;
+  type Notion = import('./notion').Notion;
+  type NoticeSection = import('./notice-section').NoticeSection;
 
   export { Medication, Notion, NoticeSection };
 }

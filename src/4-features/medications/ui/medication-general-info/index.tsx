@@ -1,28 +1,16 @@
-import { medicationsStorage } from '5-entites';
-import { Text, ToastService, theme } from '6-shared';
+import { Text, theme } from '6-shared';
 import moment from 'moment';
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 interface Props {
+  medication: Entities.Medication;
   rightComponent?: React.ReactNode;
   additionalStyles?: ViewProps['style'];
 }
 
-const MedicationGeneralInfo: FC<Props & Pick<Entities.Medication, 'id'>> = ({
-  id,
-  rightComponent,
-  additionalStyles,
-}) => {
-  const [medication, setMedication] = useState<Entities.Medication | null>(null);
-
-  useEffect(() => {
-    if (id) {
-      medicationsStorage.getMedication({ id }).then(setMedication).catch(ToastService.showErrorMessage);
-    }
-  }, [id]);
-
+const MedicationGeneralInfo: FC<Props> = ({ medication, rightComponent, additionalStyles }) => {
   if (!medication) {
     return null;
   }

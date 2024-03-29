@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
 import Notion from '5-entites/notions/ui/notion';
-import { NoticeInput } from '4-features';
+import { DeleteButton, MedicationGeneralInfo, NoticeInput } from '4-features';
+import { medicationsStorage, notionsStorage } from '5-entites';
 import { SpacingStyles, ToastService } from '6-shared';
-import { notionsStorage } from '5-entites';
+import EditModal from '4-features/medications/ui/edit-modal';
 
 interface Callbacks {
-  ListHeaderComponent: () => React.ReactNode;
   renderItem: ListRenderItem<Entities.Notion>;
   onAddNotion: (notion: Entities.Notion) => void;
 }
@@ -18,10 +18,10 @@ interface Props {
 
 const NotionsListWidget: FC<Props> = ({ id, headerComponent }) => {
   const [notions, setNotions] = useState<Entities.Notion[]>([]);
+  const [medication, setMedication] = useState<Entities.Medication | null>(null);
 
   const callbacks: Callbacks = useMemo(
     () => ({
-      ListHeaderComponent: () => headerComponent,
       renderItem: ({ item }) => {
         return (
           <Notion additionalStyles={SpacingStyles.mb.s} text={item.text} createdAt={item.createdAt} />
@@ -34,6 +34,7 @@ const NotionsListWidget: FC<Props> = ({ id, headerComponent }) => {
 
   useEffect(() => {
     if (id) {
+      medicationsStorage.getMedication({ id }).then(setMedication).catch(ToastService.showErrorMessage);
       notionsStorage.getMedicationNotions({ id }).then(setNotions).catch(ToastService.showErrorMessage);
     }
   }, [id, callbacks]);
@@ -42,12 +43,25 @@ const NotionsListWidget: FC<Props> = ({ id, headerComponent }) => {
     <>
       <FlatList
         contentContainerStyle={styles.scrollContent}
-        ListHeaderComponent={callbacks.ListHeaderComponent}
+        ListHeaderComponent={() =>
+          medication && (
+            <MedicationGeneralInfo
+              rightComponent={<DeleteButton id={id} />}
+              additionalStyles={SpacingStyles.mb.m}
+              medication={medication}
+            />
+          )
+        }
         data={notions}
         renderItem={callbacks.renderItem}
         keyExtractor={item => item.id}
       />
-      <NoticeInput id={id} onAddNotion={callbacks.onAddNotion} />
+      {medication && (
+        <>
+          <EditModal medication={medication} onSubmit={setMedication} />
+          <NoticeInput id={id} onAddNotion={callbacks.onAddNotion} />
+        </>
+      )}
     </>
   );
 };
