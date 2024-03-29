@@ -1,6 +1,5 @@
-import logger from 'utils/logger';
 import { DB_NAME, STORAGE_KEYS } from '6-shared/constants/sql';
-import { Storage } from '6-shared';
+import { Storage, logger } from '6-shared';
 
 class MedicationsStorage extends Storage {
   constructor(dbName: string) {

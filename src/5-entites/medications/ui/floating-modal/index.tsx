@@ -2,7 +2,7 @@ import React, { forwardRef, memo, useCallback, useImperativeHandle } from 'react
 import { useWindowDimensions, StyleSheet, ViewProps } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
-import { theme } from 'theme';
+import { theme } from '6-shared';
 import Modal from './components/modal';
 import AddButton from './components/add-button';
 import useAnimatedPositionStyles from './hooks/use-animated-position-styles';

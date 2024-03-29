@@ -1,8 +1,7 @@
 import React from 'react';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SCREENS from '1-app/navigation/constants/screens';
 import { MedicationsList, NotesList } from '2-screens';
-import { Icon, theme } from '6-shared';
+import { Icon, SCREENS, theme } from '6-shared';
 
 const Tab = createBottomTabNavigator();
 

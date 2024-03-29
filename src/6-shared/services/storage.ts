@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import logger from 'utils/logger';
+import { logger } from '6-shared';
 
 /**
  * Base storage class to handle SQLite operations.

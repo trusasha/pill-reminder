@@ -1,7 +1,7 @@
+import { theme } from '6-shared/theme';
 import React, { FC, PropsWithChildren } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated';
-import { theme } from 'theme';
 
 interface Props {
   initialValue: number;

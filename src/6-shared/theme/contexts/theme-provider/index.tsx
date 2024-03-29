@@ -1,7 +1,7 @@
+import { AppTheme, theme as appTheme } from '6-shared/theme';
 import React, { ReactNode, useMemo } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components/native';
-import { AppTheme, theme as appTheme } from 'theme';
 
 export interface ThemeContextValues {
   theme: AppTheme;

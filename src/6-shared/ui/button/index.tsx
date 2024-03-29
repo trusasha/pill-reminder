@@ -1,8 +1,8 @@
-import Icon from 'components/icon';
-import Text from 'components/text';
+import { theme } from '6-shared/theme';
 import React, { FC } from 'react';
 import { TouchableOpacityProps, StyleSheet, TouchableOpacity } from 'react-native';
-import { theme } from 'theme';
+import Text from '../text';
+import Icon from '../icon';
 
 interface Props extends Omit<TouchableOpacityProps, 'disabled'> {
   label?: string;

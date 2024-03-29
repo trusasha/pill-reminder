@@ -1,10 +1,7 @@
 import React, { FC, memo } from 'react';
-import Text from 'components/text';
-import { SpacingStyles, theme } from 'theme';
 import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
-import useNavigate from 'hooks/use-navigation';
-import SCREENS from '1-app/navigation/constants/screens';
+import { SCREENS, SpacingStyles, Text, theme, useNavigate } from '6-shared';
 import Styled from './index.styled';
 
 interface Props extends Pick<Entities.Medication, 'id' | 'name' | 'description' | 'createdAt'> {

@@ -1,9 +1,9 @@
-import Text from 'components/text';
 import React, { FC, memo, useCallback, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
-import { SpacingStyles, theme } from 'theme';
+import { SpacingStyles, theme } from '6-shared/theme';
 import { counterEnteringDecrement, counterEnteringIncrement } from './animation';
+import Text from '../text';
 
 interface Props {
   count: number;

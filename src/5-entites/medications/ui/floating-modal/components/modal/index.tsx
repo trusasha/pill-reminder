@@ -1,3 +1,4 @@
+import { theme } from '6-shared';
 import React, { memo } from 'react';
 import type { ViewProps } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
@@ -7,7 +8,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { theme } from 'theme';
 
 type ModalProps = {
   title: string;

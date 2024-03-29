@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { ViewProps } from 'react-native';
-import Icon from 'components/icon';
-import { theme } from 'theme';
+import { Icon, theme } from '6-shared';
 import Styled from './index.styled';
 
 type Props = {

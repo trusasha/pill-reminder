@@ -1,10 +1,9 @@
 import { medicationsStorage } from '5-entites';
-import { Text, ToastService } from '6-shared';
+import { Text, ToastService, theme } from '6-shared';
 import moment from 'moment';
 import React, { FC, memo, useEffect, useState } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { theme } from 'theme';
 
 interface Props {
   rightComponent?: React.ReactNode;

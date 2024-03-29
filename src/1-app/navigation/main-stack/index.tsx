@@ -3,9 +3,8 @@ import {
   NativeStackNavigationOptions,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import { theme } from 'theme';
 import { MedicationsDetails } from '2-screens';
-import SCREENS from '../constants/screens';
+import { SCREENS, theme } from '6-shared';
 import BottomTabs from './bottom-tabs';
 
 const Stack = createNativeStackNavigator();

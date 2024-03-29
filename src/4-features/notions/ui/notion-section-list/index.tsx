@@ -24,7 +24,7 @@ const renderSectionHeader: SectionListProps<Entities.Notion>['renderSectionHeade
 
 const ListHeaderComponent = (
   <Text fontSize={theme.fontSizes.xxl} fontWeight="700" style={SpacingStyles.mb.xxl}>
-    MEDICATION LIST
+    MEDICATION NOTICES
   </Text>
 );
 
@@ -43,6 +43,7 @@ const NotionSectionList = () => {
   return (
     <Styled.Container edges={['top']}>
       <SectionList
+        stickySectionHeadersEnabled={false}
         sections={sections}
         renderSectionHeader={renderSectionHeader}
         bounces={false}

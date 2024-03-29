@@ -1,6 +1,5 @@
-import logger from 'utils/logger';
 import { DB_NAME } from '6-shared/constants/sql';
-import { Storage } from '6-shared';
+import { Storage, logger } from '6-shared';
 
 class NotionsStorage extends Storage {
   constructor(dbName: string) {
@@ -26,7 +25,7 @@ class NotionsStorage extends Storage {
    * @param {Pick<Entities.Notion, 'text' | 'medicationId'>} data Data for the new notion.
    * @returns {Promise<Entities.Notion>} The newly created notion.
    */
-  async addNotion(data: Pick<Entities.Notion, 'text' | 'medicationId'>) {
+  async addNotion(data: Pick<Entities.Notion, 'text' | 'medicationId'>): Promise<Entities.Notion> {
     const sqlStatement = `INSERT INTO notions (text, medicationId, createdAt) VALUES (?, ?, ?)`;
     const currentDateISO = new Date().toISOString();
     const args = [data.text, data.medicationId, currentDateISO];
@@ -34,7 +33,7 @@ class NotionsStorage extends Storage {
       const insertId = await this.insert(sqlStatement, args);
       logger.log(`Notion added with ID: ${insertId}`);
       return {
-        id: insertId,
+        id: String(insertId),
         text: data.text,
         medicationId: data.medicationId,
         createdAt: currentDateISO,
@@ -50,7 +49,7 @@ class NotionsStorage extends Storage {
    * @param {Pick<Entities.Medication, 'id'>} data Identifying information of the medication.
    * @returns {Promise<Entities.Notion[]>} A list of notions for the medication.
    */
-  async getMedicationNotions(data: Pick<Entities.Medication, 'id'>) {
+  async getMedicationNotions(data: Pick<Entities.Medication, 'id'>): Promise<Entities.Notion[]> {
     const sqlStatement = `SELECT * FROM notions WHERE medicationId = ? ORDER BY createdAt DESC`;
     try {
       const notions = await this.query(sqlStatement, [data.id]);
@@ -67,7 +66,7 @@ class NotionsStorage extends Storage {
    * This method fetches all notions and groups them by the medication they are associated with.
    * @returns {Promise<Entities.NoticeSection[]>} A promise that resolves to an array of notice sections.
    */
-  async getMedicationSectionNotices() {
+  async getMedicationSectionNotices(): Promise<Entities.NoticeSection[]> {
     const sqlStatement = `
           SELECT m.id as medicationId, m.name, n.text, n.createdAt 
           FROM notions n

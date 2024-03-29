@@ -1,11 +1,8 @@
-import Button from 'components/button';
-import TextInput from 'components/text-input';
+import { notionsStorage } from '5-entites';
+import { Button, TextInput, ToastService, theme } from '6-shared';
 import React, { FC, memo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import storage from 'services/storage';
-import ToastService from 'services/toast';
-import { theme } from 'theme';
 
 interface Props {
   id: string;
@@ -16,7 +13,7 @@ const NoticeInput: FC<Props> = ({ id, onAddNotion }) => {
   const [comment, setComment] = useState('');
 
   const onSend = () => {
-    storage
+    notionsStorage
       .addNotion({
         medicationId: id,
         text: comment,

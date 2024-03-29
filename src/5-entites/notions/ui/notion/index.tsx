@@ -1,9 +1,8 @@
-import Text from 'components/text';
+import { SpacingStyles, Text, theme } from '6-shared';
 import moment from 'moment';
 import React, { FC, memo } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { SpacingStyles, theme } from 'theme';
 
 interface Props {
   text: string;

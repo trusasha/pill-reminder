@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
-import storage from 'services/storage';
-import { SpacingStyles } from 'theme';
-import ToastService from 'services/toast';
 import Notion from '5-entites/notions/ui/notion';
 import { NoticeInput } from '4-features';
+import { SpacingStyles, ToastService } from '6-shared';
+import { notionsStorage } from '5-entites';
 
 interface Callbacks {
   ListHeaderComponent: () => React.ReactNode;
@@ -35,7 +34,7 @@ const NotionsListWidget: FC<Props> = ({ id, headerComponent }) => {
 
   useEffect(() => {
     if (id) {
-      storage.getMedicationNotions({ id }).then(setNotions).catch(ToastService.showErrorMessage);
+      notionsStorage.getMedicationNotions({ id }).then(setNotions).catch(ToastService.showErrorMessage);
     }
   }, [id, callbacks]);
 

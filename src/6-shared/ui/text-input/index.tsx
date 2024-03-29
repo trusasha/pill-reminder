@@ -1,9 +1,9 @@
 import React, { FC, memo } from 'react';
 import { TextInputProps } from 'react-native';
-import Text from 'components/text';
-import { SpacingStyles, theme } from 'theme';
 import { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { SpacingStyles, theme } from '6-shared/theme';
 import Styled from './index.styled';
+import Text from '../text';
 
 interface Props extends TextInputProps {
   label?: string;

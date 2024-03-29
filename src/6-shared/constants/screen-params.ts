@@ -1,5 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
-import SCREENS from '../screens';
+import SCREENS from './screens';
 
 export type ScreenParams = {
   [SCREENS.TABS]: undefined;

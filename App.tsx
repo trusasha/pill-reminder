@@ -2,12 +2,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 
 import MainStack from '1-app/navigation/main-stack';
-import { ThemeProvider } from 'theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Linking, Platform, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeProvider } from '6-shared';
 
 const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
 
